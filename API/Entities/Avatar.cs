@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Entities
 {
@@ -10,8 +6,8 @@ namespace API.Entities
   public class Avatar
   {
     public int Id { get; set; }
-    public int Url { get; set; }
-    public int PublicId { get; set; }
+    public string Url { get; set; }
+    public string PublicId { get; set; }
 
   /* Fully define relationship to AppUser : 
     - makes appUser non nullable 
