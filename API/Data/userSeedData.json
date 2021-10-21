@@ -42,45 +42,38 @@
         }
     },
     {
-        "Username": "Erika",
-        "Email": "erikamiranda@geostele.com",
+        "Username": "Rodgers",
+        "Email": "rodgersbernard@recognia.com",
         "Avatar": {
-            "Url": "https://randomuser.me/api/portraits/women/38.jpg"
+          "Url": "https://randomuser.me/api/portraits/men/65.jpg"
         }
-    },
-    {
-        "Username": "Bianca",
-        "Email": "biancamiranda@geostele.com",
+      },
+      {
+        "Username": "Lewis",
+        "Email": "lewisbernard@recognia.com",
         "Avatar": {
-            "Url": "https://randomuser.me/api/portraits/women/48.jpg"
+          "Url": "https://randomuser.me/api/portraits/men/69.jpg"
         }
-    },
-    {
-        "Username": "Pearl",
-        "Email": "pearlmiranda@geostele.com",
+      },
+      {
+        "Username": "Booth",
+        "Email": "boothbernard@recognia.com",
         "Avatar": {
-            "Url": "https://randomuser.me/api/portraits/women/93.jpg"
+          "Url": "https://randomuser.me/api/portraits/men/55.jpg"
         }
-    },
-    {
-        "Username": "Ronda",
-        "Email": "rondamiranda@geostele.com",
+      },
+      {
+        "Username": "Hamilton",
+        "Email": "hamiltonbernard@recognia.com",
         "Avatar": {
-            "Url": "https://randomuser.me/api/portraits/women/67.jpg"
+          "Url": "https://randomuser.me/api/portraits/men/86.jpg"
         }
-    },
-    {
-        "Username": "Eunice",
-        "Email": "eunicemiranda@geostele.com",
+      },
+      {
+        "Username": "Spears",
+        "Email": "spearsbernard@recognia.com",
         "Avatar": {
-            "Url": "https://randomuser.me/api/portraits/women/75.jpg"
+          "Url": "https://randomuser.me/api/portraits/men/69.jpg"
         }
-    },
-    {
-        "Username": "Emma",
-        "Email": "emmamiranda@geostele.com",
-        "Avatar": {
-            "Url": "https://randomuser.me/api/portraits/women/79.jpg"
-        }
-    }
+      }
 ]

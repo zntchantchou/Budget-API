@@ -21,7 +21,7 @@ namespace API.Controllers
 
         [HttpPost("register")]
         // parameters are expected to be received as part of an object
-        public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO) {
+        public async Task<ActionResult<AccountUserDTO>> Register(RegisterDTO registerDTO) {
             using var hmac = new HMACSHA512();
             if(await UserExists(registerDTO.Username)) return BadRequest("Username is taken");
             var user = new AppUser {
@@ -31,14 +31,14 @@ namespace API.Controllers
             };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            return new UserDTO() {
+            return new AccountUserDTO() {
                 Username = registerDTO.Username,
                 Token = _tokenService.CreateToken(user)
             };
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO) {
+        public async Task<ActionResult<AccountUserDTO>> Login(LoginDTO loginDTO) {
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Username == loginDTO.Username);
             if(user == null) return Unauthorized("Invalid username");
             using var hmac = new HMACSHA512(user.PasswordSalt);
@@ -46,7 +46,7 @@ namespace API.Controllers
             for(int i = 0; i < computedHash.Length; i++) {
                 if(computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password");
             }
-            return new UserDTO {
+            return new AccountUserDTO {
                 Username = user.Username, 
                 Token = _tokenService.CreateToken(user)
             };
