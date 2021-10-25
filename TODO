@@ -1,0 +1,22 @@
+
+done: 
+  
+  ✔ Create a picture Table, an expense may have a picture @done(21-10-21 09:37)
+  ✔ Add Tables for Tags @done(21-10-25 14:23)
+  ✔ Add Table for Campaigns @done(21-10-25 17:42)
+  ✔ Add Tables for Expenses @done(21-10-25 17:42)
+   
+todo: 
+
+  ☐ Add Tables for Tags, Pictures (Currencies)
+  ☐ Add Tables for Pictures
+  ☐ Add unique constraint to email
+  ☐ Add Picture to expense entity, (campaign?)
+
+questions : 
+  ☐ Notion of role inside of campaign (can anyone delete ? update campaign title ? )
+  ☐ every user should be able to delete their account
+  ☐ every user should be able to transfer admin rights on campaign
+
+
+  
