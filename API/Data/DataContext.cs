@@ -15,13 +15,11 @@ namespace API.Data
     protected override void OnModelCreating(ModelBuilder builder)
     {
       builder.Entity<AppUser>()
-      .HasMany<Campaign>(u => u.Campaigns);
+      .HasMany(u => u.Campaigns)
+      .WithMany(c => c.Users);
 
       builder.Entity<Campaign>()
-      .HasOne<AppUser>(c => c.Admin);
-
-      builder.Entity<Campaign>()
-      .HasMany<AppUser>(c => c.Users);
+      .HasOne(c => c.Admin);
     }
   }
 }

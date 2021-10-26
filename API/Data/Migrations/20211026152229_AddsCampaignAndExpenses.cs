@@ -3,21 +3,36 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Data.Migrations
 {
-    public partial class CreateCampaignsAndExpenses : Migration
+    public partial class AddsCampaignAndExpenses : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "CampaignId",
+            migrationBuilder.AlterColumn<string>(
+                name: "Username",
                 table: "Users",
-                type: "INTEGER",
-                nullable: true);
+                type: "TEXT",
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "TEXT",
+                oldNullable: true);
 
-            migrationBuilder.AddColumn<int>(
-                name: "ExpenseId",
+            migrationBuilder.AlterColumn<string>(
+                name: "Email",
+                table: "Users",
+                type: "TEXT",
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "TEXT",
+                oldNullable: true);
+
+            migrationBuilder.AddColumn<bool>(
+                name: "Active",
                 table: "Users",
                 type: "INTEGER",
-                nullable: true);
+                nullable: false,
+                defaultValue: false);
 
             migrationBuilder.CreateTable(
                 name: "Campaigns",
@@ -35,6 +50,30 @@ namespace API.Data.Migrations
                     table.ForeignKey(
                         name: "FK_Campaigns_Users_AdminId",
                         column: x => x.AdminId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppUserCampaign",
+                columns: table => new
+                {
+                    CampaignsId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UsersId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUserCampaign", x => new { x.CampaignsId, x.UsersId });
+                    table.ForeignKey(
+                        name: "FK_AppUserCampaign_Campaigns_CampaignsId",
+                        column: x => x.CampaignsId,
+                        principalTable: "Campaigns",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppUserCampaign_Users_UsersId",
+                        column: x => x.UsersId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -78,14 +117,9 @@ namespace API.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_CampaignId",
-                table: "Users",
-                column: "CampaignId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_ExpenseId",
-                table: "Users",
-                column: "ExpenseId");
+                name: "IX_AppUserCampaign_UsersId",
+                table: "AppUserCampaign",
+                column: "UsersId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Campaigns_AdminId",
@@ -106,33 +140,12 @@ namespace API.Data.Migrations
                 name: "IX_Expenses_PaidById",
                 table: "Expenses",
                 column: "PaidById");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Users_Campaigns_CampaignId",
-                table: "Users",
-                column: "CampaignId",
-                principalTable: "Campaigns",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Users_Expenses_ExpenseId",
-                table: "Users",
-                column: "ExpenseId",
-                principalTable: "Expenses",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Users_Campaigns_CampaignId",
-                table: "Users");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Users_Expenses_ExpenseId",
-                table: "Users");
+            migrationBuilder.DropTable(
+                name: "AppUserCampaign");
 
             migrationBuilder.DropTable(
                 name: "Expenses");
@@ -140,21 +153,25 @@ namespace API.Data.Migrations
             migrationBuilder.DropTable(
                 name: "Campaigns");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Users_CampaignId",
-                table: "Users");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Users_ExpenseId",
-                table: "Users");
-
             migrationBuilder.DropColumn(
-                name: "CampaignId",
+                name: "Active",
                 table: "Users");
 
-            migrationBuilder.DropColumn(
-                name: "ExpenseId",
-                table: "Users");
+            migrationBuilder.AlterColumn<string>(
+                name: "Username",
+                table: "Users",
+                type: "TEXT",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "TEXT");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Email",
+                table: "Users",
+                type: "TEXT",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "TEXT");
         }
     }
 }

@@ -25,9 +25,8 @@ namespace API.Entities
     public int CampaignId { get; set; }
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
+
     [Required]
-    public DateTime ExpenseDate { get; set; } = DateTime.Now;
-    //  assume all users are included unless some users are included explicitly by the user
-    public IEnumerable<AppUser> Contributors { get; set; }
+    public DateTime ExpenseDate { get; set; } = DateTime.Now;    
   }
 }

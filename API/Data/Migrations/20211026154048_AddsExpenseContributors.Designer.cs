@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20211025143020_CreateCampaignsAndExpenses")]
-    partial class CreateCampaignsAndExpenses
+    [Migration("20211026154048_AddsExpenseContributors")]
+    partial class AddsExpenseContributors
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,17 +24,15 @@ namespace API.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CampaignId")
+                    b.Property<bool>("Active")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int?>("ExpenseId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<byte[]>("PasswordHash")
                         .HasColumnType("BLOB");
@@ -43,13 +41,10 @@ namespace API.Data.Migrations
                         .HasColumnType("BLOB");
 
                     b.Property<string>("Username")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CampaignId");
-
-                    b.HasIndex("ExpenseId");
 
                     b.ToTable("Users");
                 });
@@ -139,15 +134,19 @@ namespace API.Data.Migrations
                     b.ToTable("Expenses");
                 });
 
-            modelBuilder.Entity("API.Entities.AppUser", b =>
+            modelBuilder.Entity("AppUserCampaign", b =>
                 {
-                    b.HasOne("API.Entities.Campaign", null)
-                        .WithMany("Users")
-                        .HasForeignKey("CampaignId");
+                    b.Property<int>("CampaignsId")
+                        .HasColumnType("INTEGER");
 
-                    b.HasOne("API.Entities.Expense", null)
-                        .WithMany("Contributors")
-                        .HasForeignKey("ExpenseId");
+                    b.Property<int>("UsersId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CampaignsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("AppUserCampaign");
                 });
 
             modelBuilder.Entity("API.Entities.Avatar", b =>
@@ -181,7 +180,7 @@ namespace API.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("API.Entities.Campaign", "Campaign")
-                        .WithMany()
+                        .WithMany("Expenses")
                         .HasForeignKey("CampaignId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -199,6 +198,21 @@ namespace API.Data.Migrations
                     b.Navigation("PaidBy");
                 });
 
+            modelBuilder.Entity("AppUserCampaign", b =>
+                {
+                    b.HasOne("API.Entities.Campaign", null)
+                        .WithMany()
+                        .HasForeignKey("CampaignsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
                     b.Navigation("Avatar");
@@ -206,12 +220,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.Campaign", b =>
                 {
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("API.Entities.Expense", b =>
-                {
-                    b.Navigation("Contributors");
+                    b.Navigation("Expenses");
                 });
 #pragma warning restore 612, 618
         }
