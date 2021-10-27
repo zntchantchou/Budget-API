@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20211026154048_AddsExpenseContributors")]
-    partial class AddsExpenseContributors
+    [Migration("20211027142423_CreateContributors")]
+    partial class CreateContributors
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -95,6 +95,27 @@ namespace API.Data.Migrations
                     b.ToTable("Campaigns");
                 });
 
+            modelBuilder.Entity("API.Entities.Contributor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ExpenseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpenseId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Contributors");
+                });
+
             modelBuilder.Entity("API.Entities.Expense", b =>
                 {
                     b.Property<int>("Id")
@@ -169,6 +190,25 @@ namespace API.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Admin");
+                });
+
+            modelBuilder.Entity("API.Entities.Contributor", b =>
+                {
+                    b.HasOne("API.Entities.Expense", "Expense")
+                        .WithMany()
+                        .HasForeignKey("ExpenseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Expense");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("API.Entities.Expense", b =>
