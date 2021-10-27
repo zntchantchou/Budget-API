@@ -1,23 +1,39 @@
 using System;
+using System.Threading.Tasks;
 using API.Controllers;
 using API.Data;
 using API.DTOs;
-using Microsoft.AspNetCore.Authorization;
+using API.Entities;
+using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 public class CampaignController : BaseApiController
 {
-private readonly DataContext _context;
-    public CampaignController(DataContext context)
-    {
-      _context = context;
+  private readonly ITokenService _tokenService;
+  private readonly DataContext _context;
 
-    }
+  private readonly IUserRepository _userRepository;
 
-    [Authorize]
-    [HttpPost]
-    public void CreateCampaign(CampaignDto campaignDTO) {
-        Console.Write("CreateCampaign");
-        Console.Write(campaignDTO.Title.ToString());
-    } 
+  public CampaignController(DataContext context, ITokenService tokenService, IUserRepository userRepository)
+  {
+    _context = context;
+    _tokenService = tokenService;
+    _userRepository = userRepository;
+  }
+
+  // [Authorize]
+  [HttpPost]
+  public async Task<ActionResult<string>> CreateCampaign(CampaignDTO campaignDTO)
+  {
+    var tokenString = Request.Headers["Authorization"].ToString();
+    var parsed = _tokenService.ParseToken(tokenString);
+    Console.WriteLine("email");
+    Console.WriteLine(parsed["email"]);
+    var user = await _userRepository.GetFullUserByEmailAsync(parsed["email"]);
+    var campaignUsers = await _userRepository.GetFullUsersByEmailAsync(campaignDTO.EmailAddresses);
+    var campaign = new Campaign { AdminId = user.Id, Title = campaignDTO.Title, Users = campaignUsers };
+    _context.Campaigns.Add(campaign);
+    await _context.SaveChangesAsync();
+    return Ok(campaign.Title);
+  }
 }

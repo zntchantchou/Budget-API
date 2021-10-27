@@ -37,6 +37,21 @@ namespace API.Data
       .SingleOrDefaultAsync();
     }
 
+    public async Task<FullUserDTO> GetFullUserByEmailAsync(String email)
+    {
+      return await _context.Users
+      .Where(u => u.Email == email)
+      .ProjectTo<FullUserDTO>(_mapper.ConfigurationProvider)
+      .SingleOrDefaultAsync();
+    }
+    public async Task<ICollection<AppUser>> GetFullUsersByEmailAsync(List<string> emails)
+    {
+      return await _context.Users
+      .Where(u => emails.Contains(u.Email))
+      // .ProjectTo<AppUser>(_mapper.ConfigurationProvider)
+      .ToListAsync();
+    }
+
     public async Task<IEnumerable<UserDTO>> GetUsersAsync()
     {
       return await _context.Users
