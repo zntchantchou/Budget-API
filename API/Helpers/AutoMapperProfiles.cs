@@ -15,6 +15,7 @@ namespace API.Helpers
       CreateMap<AppUser, UserDTO>()
       .ForMember(u => u.AvatarUrl, src => src.MapFrom(u => u.Avatar.Url));
       CreateMap<Avatar, AvatarDTO>();
+      CreateMap<AppUser, FullUserDTO>();
     }
   }
 }
