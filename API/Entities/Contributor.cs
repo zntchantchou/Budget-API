@@ -10,10 +10,10 @@ namespace API.Entities
     public int UserId { get; set; }
 
     [Required]
-    public AppUser User { get; set; }
+    public virtual AppUser User { get; set; }
 
     [Required]
-    public Expense Expense { get; set; }
+    public virtual Expense Expense { get; set; }
 
     [Required]
     public int ExpenseId { get; set; }

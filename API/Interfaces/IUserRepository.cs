@@ -15,7 +15,7 @@ namespace API.Interfaces
 
     Task<UserDTO> GetUserByIdAsync(int id);
     Task<UserDTO> GetUserByEmailAsync(String email);
-    Task<FullUserDTO> GetFullUserByEmailAsync(String email);
+    Task<AppUser> GetFullUserByEmailAsync(String email);
     Task<ICollection<AppUser>> GetFullUsersByEmailAsync(List<string> email);
 
   }

@@ -20,7 +20,8 @@ namespace API.Entities
     
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
-    public Avatar Avatar { get; set; }
-    public ICollection<Campaign> Campaigns { get; set; } = new List<Campaign>(); 
+    public int AvatarId { get; set; }
+    public virtual Avatar Avatar { get; set; }
+    public virtual ICollection<Campaign> Campaigns { get; set; } = new HashSet<Campaign>(); 
   }
 }

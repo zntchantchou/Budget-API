@@ -37,11 +37,10 @@ namespace API.Data
       .SingleOrDefaultAsync();
     }
 
-    public async Task<FullUserDTO> GetFullUserByEmailAsync(String email)
+    public async Task<AppUser> GetFullUserByEmailAsync(String email)
     {
       return await _context.Users
       .Where(u => u.Email == email)
-      .ProjectTo<FullUserDTO>(_mapper.ConfigurationProvider)
       .SingleOrDefaultAsync();
     }
     public async Task<ICollection<AppUser>> GetFullUsersByEmailAsync(List<string> emails)

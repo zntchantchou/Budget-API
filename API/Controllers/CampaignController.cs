@@ -30,7 +30,10 @@ public class CampaignController : BaseApiController
     var tokenString = Request.Headers["Authorization"].ToString();
     var userData = _tokenService.ParseToken(tokenString);
     var user = await _userRepository.GetFullUserByEmailAsync(userData["email"]);
-    var campaign = new Campaign { AdminId = user.Id, Title = campaignDTO.Title };
+    var campaign = new Campaign { 
+      AdminId = user.Id,
+      Title = campaignDTO.Title 
+    };
     if (campaignDTO.UserEmails.Count > 0)
     {
       // make sure  a user was found for every user provided 
@@ -42,7 +45,6 @@ public class CampaignController : BaseApiController
     }
 
     // right now if users are not retrieved by email, campaign is still created without users
-
     _context.Campaigns.Add(campaign);
     await _context.SaveChangesAsync();
     return Ok(campaignDTO);

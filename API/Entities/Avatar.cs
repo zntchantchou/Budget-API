@@ -12,8 +12,7 @@ namespace API.Entities
   /* Fully define relationship to AppUser : 
     - makes appUser non nullable 
     - makes deletion of user cascade to AppUser.Avatar 
-  */  
-    public AppUser AppUser { get; set; }
+  */ 
     public int AppUserId { get; set; }
   }
 }
