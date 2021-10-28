@@ -15,6 +15,9 @@ namespace API.Data
     protected override void OnModelCreating(ModelBuilder builder)
     {
       builder.Entity<AppUser>()
+      .HasIndex(p => p.Email).IsUnique();
+      
+      builder.Entity<AppUser>()
       .HasMany(u => u.Campaigns)
       .WithMany(c => c.Users);
 
