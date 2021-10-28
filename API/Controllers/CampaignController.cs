@@ -11,7 +11,6 @@ public class CampaignController : BaseApiController
 {
   private readonly ITokenService _tokenService;
   private readonly DataContext _context;
-
   private readonly IUserRepository _userRepository;
 
   public CampaignController(DataContext context, ITokenService tokenService, IUserRepository userRepository)
