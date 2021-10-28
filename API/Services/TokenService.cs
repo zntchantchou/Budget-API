@@ -37,6 +37,7 @@ namespace API.Services
       return tokenHandler.WriteToken(token);
     }
 
+<<<<<<< HEAD
     public bool DecodeToken(string token)
     {
       var tokenHandler = new JwtSecurityTokenHandler();
@@ -59,6 +60,8 @@ namespace API.Services
       return true;
     }
 
+=======
+>>>>>>> 4f4c197... wqadds parseToken to ItokenService
 
     public Dictionary<string, string> ParseToken(string token)
     {
@@ -67,10 +70,13 @@ namespace API.Services
       {
         var securityToken = tokenHandler.ReadToken(token.Substring(7)) as JwtSecurityToken;
         var claims = securityToken.Claims;
+<<<<<<< HEAD
         // var otherToken = new JwtSecurityToken(token.Substring(7));
         // var asObj = otherToken.Subject.ToString();
         // Console.WriteLine("asObj");
         // Console.WriteLine(asObj);
+=======
+>>>>>>> 4f4c197... wqadds parseToken to ItokenService
         var parsed = new Dictionary<string, string>();
         foreach (Claim claim in claims)
         {
@@ -79,8 +85,11 @@ namespace API.Services
             parsed.Add(claim.Type, claim.Value);
           }
         }
+<<<<<<< HEAD
         // Console.WriteLine(parsed["email"]);
         // Console.WriteLine(parsed["nameid"]);
+=======
+>>>>>>> 4f4c197... wqadds parseToken to ItokenService
         return parsed;
       }
       catch
