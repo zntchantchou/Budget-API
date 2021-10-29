@@ -4,16 +4,16 @@ namespace API.Entities
 {
   public class Contributor
   {
-    public int Id { get; set; }
+    public int ContributorId { get; set; }
 
     [Required]
     public int UserId { get; set; }
 
     [Required]
-    public virtual AppUser User { get; set; }
+    public AppUser User { get; set; }
 
     [Required]
-    public virtual Expense Expense { get; set; }
+    public Expense Expense { get; set; }
 
     [Required]
     public int ExpenseId { get; set; }

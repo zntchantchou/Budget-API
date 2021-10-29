@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Controllers;
 using API.Data;
@@ -6,6 +7,7 @@ using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 public class CampaignController : BaseApiController
@@ -23,16 +25,17 @@ public class CampaignController : BaseApiController
     _mapper = mapper;
   }
 
-  // [Authorize]
+  [Authorize]
   [HttpPost]
   public async Task<ActionResult<string>> CreateCampaign(CampaignDTO campaignDTO)
   {
     var tokenString = Request.Headers["Authorization"].ToString();
     var userData = _tokenService.ParseToken(tokenString);
     var user = await _userRepository.GetFullUserByEmailAsync(userData["email"]);
-    var campaign = new Campaign { 
-      AdminId = user.Id,
-      Title = campaignDTO.Title 
+    var campaign = new Campaign
+    {
+      AdminId = user.AppUserId,
+      Title = campaignDTO.Title
     };
     if (campaignDTO.UserEmails.Count > 0)
     {
@@ -40,13 +43,24 @@ public class CampaignController : BaseApiController
       var campaignUsers = await _userRepository.GetFullUsersByEmailAsync(campaignDTO.UserEmails);
       if (campaignUsers != null && campaignUsers.Count == campaignDTO.UserEmails.Count)
       {
-        campaign.Users = campaignUsers;
+        // campaign.Users = campaignUsers;
       }
     }
-
     // right now if users are not retrieved by email, campaign is still created without users
     _context.Campaigns.Add(campaign);
     await _context.SaveChangesAsync();
     return Ok(campaignDTO);
   }
+
+  // [Authorize]
+  // [HttpGet]
+  // public async Task<ActionResult<ICollection<Campaign>>> GetUserCampaigns()
+  // {
+  //   var tokenString = Request.Headers["Authorization"].ToString();
+  //   var userData = _tokenService.ParseToken(tokenString);
+  //   Console.WriteLine("GetUserCampaigns");
+  //   var email = userData["email"];
+  //   var user = await _userRepository.GetFullUserByEmailAsync(email);
+  //   return Ok(user.Campaigns);
+  // }
 }

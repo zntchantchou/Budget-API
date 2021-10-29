@@ -24,7 +24,7 @@ namespace API.Data
     public async Task<UserDTO> GetUserByIdAsync(int id)
     {
       return await _context.Users
-      .Where(u => u.Id == id)
+      .Where(u => u.AppUserId == id)
       .ProjectTo<UserDTO>(_mapper.ConfigurationProvider)
       .SingleOrDefaultAsync();
     }

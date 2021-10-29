@@ -27,29 +27,31 @@ namespace API.Data
       }
       await context.SaveChangesAsync();
     }
-    public static async Task SeedUserCampaigns(DataContext context)
-    {
-      Console.WriteLine("Seeding Campaigns...");
-      var users = await context.Users.ToListAsync();
-      foreach (var user in users)
-      {
-        Console.WriteLine($"Seeding campaings for user {user.Email}");
-        var userCampaigns = new HashSet<Campaign>();
-        for (int i = 0; i < 3; i++)
-        {
-					var otherUsers = users.FindAll(u => u.Email != user.Email);
-          var cpgn = new Campaign { 
-						Title = $"Campaign_{user.Username}_{i}",
-						Description = $"Description for campaign number {i} of user {user.Email}",	
-            AdminId = user.Id,
-            Users = otherUsers,
-					};
-          userCampaigns.Add(cpgn);
-          user.Campaigns = userCampaigns;
-        }
-        await context.SaveChangesAsync();
-        Console.WriteLine($"Saved campaigns for user {user.Email}");
-      }
-    }
+    // public static async Task SeedUserCampaigns(DataContext context)
+    // {
+    //   Console.WriteLine("Seeding Campaigns...");
+    //   if(await context.Campaigns.AnyAsync()) return;
+      
+    //   var users = await context.Users.ToListAsync();
+    //   foreach (var user in users)
+    //   {
+    //     Console.WriteLine($"Seeding campaings for user {user.Email}");
+    //     var userCampaigns = new HashSet<Campaign>();
+    //     for (int i = 0; i < 3; i++)
+    //     {
+		// 			var otherUsers = users.FindAll(u => u.Email != user.Email);
+    //       var cpgn = new Campaign { 
+		// 				Title = $"Campaign_{user.Username}_{i}",
+		// 				Description = $"Description for campaign number {i} of user {user.Email}",	
+    //         AdminId = user.AppUserId,
+    //         Users = otherUsers
+		// 			};
+    //       userCampaigns.Add(cpgn);
+    //       user.Campaigns = userCampaigns;
+    //     }
+    //     await context.SaveChangesAsync();
+    //     Console.WriteLine($"Saved campaigns for user {user.Email}");
+    //   }
+    // }
   }
 }

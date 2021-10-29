@@ -16,15 +16,16 @@ namespace API.Data
     {
       builder.Entity<AppUser>()
       .HasIndex(p => p.Email).IsUnique();
-      
-      // builder.Entity<AppUser>()
-      // .HasMany(u => u.Campaigns)
-      // .WithMany(c => c.Users);
 
-      builder.Entity<Campaign>()
-      .HasOne(c => c.Admin)
-      .WithMany(a => a.Campaigns)
-      .HasForeignKey(c => c.AdminId);
+      builder.Entity<AppUser>()
+      .HasOne(u => u.Avatar)
+      .WithOne(a => a.AppUser)
+      .HasForeignKey<Avatar>(u => u.AppUserId);
+
+      // builder.Entity<Campaign>()
+      // .HasOne(c => c.Admin)
+      // .WithMany(a => a.Campaigns)
+      // .HasForeignKey(c => c.AdminId);
     }
   }
 }

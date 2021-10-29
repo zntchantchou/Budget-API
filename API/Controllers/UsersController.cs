@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using API.Data;
-using API.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using API.Interfaces;
 using AutoMapper;

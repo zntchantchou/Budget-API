@@ -18,20 +18,11 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AppUserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("Active")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AvatarId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("AvatarId1")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("CampaignId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
@@ -51,11 +42,7 @@ namespace API.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("AvatarId1");
-
-                    b.HasIndex("CampaignId");
+                    b.HasKey("AppUserId");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -65,7 +52,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.Avatar", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AvatarId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -78,14 +65,17 @@ namespace API.Data.Migrations
                     b.Property<string>("Url")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("AvatarId");
+
+                    b.HasIndex("AppUserId")
+                        .IsUnique();
 
                     b.ToTable("Avatars");
                 });
 
             modelBuilder.Entity("API.Entities.Campaign", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CampaignId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -103,7 +93,7 @@ namespace API.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("CampaignId");
 
                     b.HasIndex("AdminId");
 
@@ -112,7 +102,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.Contributor", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ContributorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -122,7 +112,7 @@ namespace API.Data.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("ContributorId");
 
                     b.HasIndex("ExpenseId");
 
@@ -133,7 +123,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.Expense", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ExpenseId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -159,7 +149,7 @@ namespace API.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("ExpenseId");
 
                     b.HasIndex("AuthorId");
 
@@ -170,23 +160,21 @@ namespace API.Data.Migrations
                     b.ToTable("Expenses");
                 });
 
-            modelBuilder.Entity("API.Entities.AppUser", b =>
+            modelBuilder.Entity("API.Entities.Avatar", b =>
                 {
-                    b.HasOne("API.Entities.Avatar", "Avatar")
-                        .WithMany()
-                        .HasForeignKey("AvatarId1");
+                    b.HasOne("API.Entities.AppUser", "AppUser")
+                        .WithOne("Avatar")
+                        .HasForeignKey("API.Entities.Avatar", "AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("API.Entities.Campaign", null)
-                        .WithMany("Users")
-                        .HasForeignKey("CampaignId");
-
-                    b.Navigation("Avatar");
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("API.Entities.Campaign", b =>
                 {
                     b.HasOne("API.Entities.AppUser", "Admin")
-                        .WithMany("Campaigns")
+                        .WithMany()
                         .HasForeignKey("AdminId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -242,14 +230,12 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
-                    b.Navigation("Campaigns");
+                    b.Navigation("Avatar");
                 });
 
             modelBuilder.Entity("API.Entities.Campaign", b =>
                 {
                     b.Navigation("Expenses");
-
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

@@ -6,9 +6,9 @@ namespace API.Entities
 {
   public class Expense
   {
-    public int Id { get; set; }
+    public int ExpenseId { get; set; }
     [Required]
-    public virtual AppUser Author { get; set; }
+    public AppUser Author { get; set; }
     [Required]
     public int AuthorId { get; set; }
     [Required]
@@ -16,11 +16,11 @@ namespace API.Entities
     [Required]
     public float Amount { get; set; }
     [Required]
-    public virtual AppUser PaidBy { get; set; }
+    public AppUser PaidBy { get; set; }
     [Required]
     public int PaidById { get; set; }
     [Required]
-    public virtual Campaign Campaign { get; set; }
+    public Campaign Campaign { get; set; }
     [Required]
     public int CampaignId { get; set; }
     [Required]

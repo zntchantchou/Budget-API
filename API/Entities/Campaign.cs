@@ -6,8 +6,8 @@ namespace API.Entities
 {
   public class Campaign
   {
-    public int Id { get; set; }
-    public virtual AppUser Admin { get; set; }
+    public int CampaignId { get; set; }
+    public AppUser Admin { get; set; }
     [Required]
     public int AdminId { get; set; }
     [Required]
@@ -16,8 +16,7 @@ namespace API.Entities
     public string Description { get; set; }
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
-    
-    public virtual ICollection<AppUser> Users { get; set; } = new HashSet<AppUser>();
-    public virtual ICollection<Expense> Expenses { get; set; } = new HashSet<Expense>();
+    // public ICollection<AppUser> Users { get; set; }
+    public ICollection<Expense> Expenses { get; set; }
   }
 }
