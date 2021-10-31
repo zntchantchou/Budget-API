@@ -24,7 +24,7 @@ namespace API.Data
     public async Task<UserDTO> GetUserByIdAsync(int id)
     {
       return await _context.Users
-      .Where(u => u.Id == id)
+      .Where(u => u.AppUserId == id)
       .ProjectTo<UserDTO>(_mapper.ConfigurationProvider)
       .SingleOrDefaultAsync();
     }
@@ -37,18 +37,16 @@ namespace API.Data
       .SingleOrDefaultAsync();
     }
 
-    public async Task<FullUserDTO> GetFullUserByEmailAsync(String email)
+    public async Task<AppUser> GetFullUserByEmailAsync(String email)
     {
       return await _context.Users
       .Where(u => u.Email == email)
-      .ProjectTo<FullUserDTO>(_mapper.ConfigurationProvider)
       .SingleOrDefaultAsync();
     }
     public async Task<ICollection<AppUser>> GetFullUsersByEmailAsync(List<string> emails)
     {
       return await _context.Users
       .Where(u => emails.Contains(u.Email))
-      // .ProjectTo<AppUser>(_mapper.ConfigurationProvider)
       .ToListAsync();
     }
 
@@ -64,7 +62,6 @@ namespace API.Data
       // EF will add a modified flag to this entity
       _context.Entry(user).State = EntityState.Modified;
     }
-
     public async Task<bool> SaveAllAsync()
     {
       return await _context.SaveChangesAsync() > 0;

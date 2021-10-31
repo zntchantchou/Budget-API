@@ -3,14 +3,16 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211029080702_defineAvatarUserRelation")]
+    partial class defineAvatarUserRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,21 +162,6 @@ namespace API.Data.Migrations
                     b.ToTable("Expenses");
                 });
 
-            modelBuilder.Entity("API.Entities.UserCampaign", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CampaignId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("UserId", "CampaignId");
-
-                    b.HasIndex("CampaignId");
-
-                    b.ToTable("UserCampaigns");
-                });
-
             modelBuilder.Entity("API.Entities.Avatar", b =>
                 {
                     b.HasOne("API.Entities.AppUser", "AppUser")
@@ -243,36 +230,13 @@ namespace API.Data.Migrations
                     b.Navigation("PaidBy");
                 });
 
-            modelBuilder.Entity("API.Entities.UserCampaign", b =>
-                {
-                    b.HasOne("API.Entities.AppUser", "User")
-                        .WithMany("UserCampaigns")
-                        .HasForeignKey("CampaignId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Entities.Campaign", "Campaign")
-                        .WithMany("CampaignUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Campaign");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
                     b.Navigation("Avatar");
-
-                    b.Navigation("UserCampaigns");
                 });
 
             modelBuilder.Entity("API.Entities.Campaign", b =>
                 {
-                    b.Navigation("CampaignUsers");
-
                     b.Navigation("Expenses");
                 });
 #pragma warning restore 612, 618

@@ -6,7 +6,7 @@ namespace API.Entities
 {
   public class Expense
   {
-    public int Id { get; set; }
+    public int ExpenseId { get; set; }
     [Required]
     public AppUser Author { get; set; }
     [Required]

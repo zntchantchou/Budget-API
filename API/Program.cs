@@ -19,7 +19,9 @@ namespace API
             try {
                 var context = services.GetRequiredService<DataContext>();
                 await context.Database.MigrateAsync();
+                // Must be done in that order 
                 await Seed.SeedUsers(context);
+                await Seed.SeedUserCampaigns(context);
             } catch (Exception ex) {
                 var logger = services.GetRequiredService<ILogger<Program>>();
                 logger.LogError(ex, "An error occured during migration (seed)");

@@ -6,10 +6,10 @@ namespace API.Entities
 {
   public class AppUser
   {
-    public int Id { get; set; }
+    public int AppUserId { get; set; }
     [Required]
     public string Username { get; set; }
-    
+
     [Required]
     public string Email { get; set; }
 
@@ -17,10 +17,10 @@ namespace API.Entities
     public bool Active { get; set; }
     public byte[] PasswordHash { get; set; }
     public byte[] PasswordSalt { get; set; }
-    
+
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public Avatar Avatar { get; set; }
-    public ICollection<Campaign> Campaigns { get; set; } = new List<Campaign>(); 
+    public ICollection<UserCampaign> UserCampaigns { get; set; }
   }
 }

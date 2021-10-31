@@ -7,7 +7,6 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using System;
 using System.Text;
-using System.Text.Json;
 
 namespace API.Services
 {
@@ -37,31 +36,6 @@ namespace API.Services
       return tokenHandler.WriteToken(token);
     }
 
-<<<<<<< HEAD
-    public bool DecodeToken(string token)
-    {
-      var tokenHandler = new JwtSecurityTokenHandler();
-      try
-      {
-        var securityToken = tokenHandler.ValidateToken(token.Substring(7), new TokenValidationParameters
-        {
-          IssuerSigningKey = _key,
-          ValidateIssuerSigningKey = true,
-        }, out SecurityToken validatedToken);
-        Console.Write("BONJOUR");
-      }
-      catch
-      {
-        return false;
-      }
-
-      //   Console.Write("asString");
-      //   Console.Write(asString);
-      return true;
-    }
-
-=======
->>>>>>> 4f4c197... wqadds parseToken to ItokenService
 
     public Dictionary<string, string> ParseToken(string token)
     {
@@ -70,13 +44,6 @@ namespace API.Services
       {
         var securityToken = tokenHandler.ReadToken(token.Substring(7)) as JwtSecurityToken;
         var claims = securityToken.Claims;
-<<<<<<< HEAD
-        // var otherToken = new JwtSecurityToken(token.Substring(7));
-        // var asObj = otherToken.Subject.ToString();
-        // Console.WriteLine("asObj");
-        // Console.WriteLine(asObj);
-=======
->>>>>>> 4f4c197... wqadds parseToken to ItokenService
         var parsed = new Dictionary<string, string>();
         foreach (Claim claim in claims)
         {
@@ -85,11 +52,6 @@ namespace API.Services
             parsed.Add(claim.Type, claim.Value);
           }
         }
-<<<<<<< HEAD
-        // Console.WriteLine(parsed["email"]);
-        // Console.WriteLine(parsed["nameid"]);
-=======
->>>>>>> 4f4c197... wqadds parseToken to ItokenService
         return parsed;
       }
       catch
@@ -99,3 +61,5 @@ namespace API.Services
     }
   }
 }
+
+// HTTP

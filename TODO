@@ -5,18 +5,27 @@ done:
   ✔ Add Tables for Tags @done(21-10-25 14:23)
   ✔ Add Table for Campaigns @done(21-10-25 17:42)
   ✔ Add Tables for Expenses @done(21-10-25 17:42)
+  ✔ Add unique constraint to user.email @done(21-10-28 11:27)
+  ✔ users should register using their email @done(21-10-28 11:34)
+  ✔ users should login using their email @done(21-10-28 11:40)
+  ✔ Add seed, add three campaigns to each user @done(21-10-28 14:53)
    
 todo: 
-
-  ☐ Add Tables for Tags, Pictures (Currencies)
+  ☐ Check that create campaign works with authorize
+  ☐ Add a getUserCampaigns method on campaign Controller
+  ☐ Add Tables for Tags (Currencies)
   ☐ Add Tables for Pictures
-  ☐ Add unique constraint to email
   ☐ Add Picture to expense entity, (campaign?)
+  ☐ add validation for emails in CreateCampaign
+    
+optional :
+  
+  ☐ Add Tables for Currencies
 
 questions : 
+  
   ☐ Notion of role inside of campaign (can anyone delete ? update campaign title ? )
   ☐ every user should be able to delete their account
   ☐ every user should be able to transfer admin rights on campaign
-
-
   
+   

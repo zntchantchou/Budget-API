@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.DTOs
 {
-  public class RegisterDTO
+  public class LoginDTO
   {
     [Required]
-    public string Username { get; set; }
-    
+    public string Email { get; set; }
     [Required]
-    [StringLength(20, MinimumLength = 4)]
     public string Password { get; set; }
   }
 }

@@ -3,14 +3,16 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211028221858_renameIds")]
+    partial class renameIds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,6 +25,12 @@ namespace API.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("Active")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AvatarId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AvatarId1")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
@@ -43,6 +51,8 @@ namespace API.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("AppUserId");
+
+                    b.HasIndex("AvatarId1");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -66,9 +76,6 @@ namespace API.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("AvatarId");
-
-                    b.HasIndex("AppUserId")
-                        .IsUnique();
 
                     b.ToTable("Avatars");
                 });
@@ -98,27 +105,6 @@ namespace API.Data.Migrations
                     b.HasIndex("AdminId");
 
                     b.ToTable("Campaigns");
-                });
-
-            modelBuilder.Entity("API.Entities.Contributor", b =>
-                {
-                    b.Property<int>("ContributorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ExpenseId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ContributorId");
-
-                    b.HasIndex("ExpenseId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Contributors");
                 });
 
             modelBuilder.Entity("API.Entities.Expense", b =>
@@ -157,33 +143,16 @@ namespace API.Data.Migrations
 
                     b.HasIndex("PaidById");
 
-                    b.ToTable("Expenses");
+                    b.ToTable("Expense");
                 });
 
-            modelBuilder.Entity("API.Entities.UserCampaign", b =>
+            modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
+                    b.HasOne("API.Entities.Avatar", "Avatar")
+                        .WithMany()
+                        .HasForeignKey("AvatarId1");
 
-                    b.Property<int>("CampaignId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("UserId", "CampaignId");
-
-                    b.HasIndex("CampaignId");
-
-                    b.ToTable("UserCampaigns");
-                });
-
-            modelBuilder.Entity("API.Entities.Avatar", b =>
-                {
-                    b.HasOne("API.Entities.AppUser", "AppUser")
-                        .WithOne("Avatar")
-                        .HasForeignKey("API.Entities.Avatar", "AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
+                    b.Navigation("Avatar");
                 });
 
             modelBuilder.Entity("API.Entities.Campaign", b =>
@@ -195,25 +164,6 @@ namespace API.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Admin");
-                });
-
-            modelBuilder.Entity("API.Entities.Contributor", b =>
-                {
-                    b.HasOne("API.Entities.Expense", "Expense")
-                        .WithMany()
-                        .HasForeignKey("ExpenseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Entities.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Expense");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("API.Entities.Expense", b =>
@@ -243,36 +193,8 @@ namespace API.Data.Migrations
                     b.Navigation("PaidBy");
                 });
 
-            modelBuilder.Entity("API.Entities.UserCampaign", b =>
-                {
-                    b.HasOne("API.Entities.AppUser", "User")
-                        .WithMany("UserCampaigns")
-                        .HasForeignKey("CampaignId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Entities.Campaign", "Campaign")
-                        .WithMany("CampaignUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Campaign");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("API.Entities.AppUser", b =>
-                {
-                    b.Navigation("Avatar");
-
-                    b.Navigation("UserCampaigns");
-                });
-
             modelBuilder.Entity("API.Entities.Campaign", b =>
                 {
-                    b.Navigation("CampaignUsers");
-
                     b.Navigation("Expenses");
                 });
 #pragma warning restore 612, 618

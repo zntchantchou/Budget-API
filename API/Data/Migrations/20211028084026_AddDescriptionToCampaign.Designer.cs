@@ -3,14 +3,16 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211028084026_AddDescriptionToCampaign")]
+    partial class AddDescriptionToCampaign
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -18,7 +20,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
-                    b.Property<int>("AppUserId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -42,17 +44,14 @@ namespace API.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("AppUserId");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("API.Entities.Avatar", b =>
                 {
-                    b.Property<int>("AvatarId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -65,7 +64,7 @@ namespace API.Data.Migrations
                     b.Property<string>("Url")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("AvatarId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AppUserId")
                         .IsUnique();
@@ -75,7 +74,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.Campaign", b =>
                 {
-                    b.Property<int>("CampaignId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -86,14 +85,13 @@ namespace API.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(140)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("CampaignId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AdminId");
 
@@ -102,7 +100,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.Contributor", b =>
                 {
-                    b.Property<int>("ContributorId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -112,7 +110,7 @@ namespace API.Data.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("ContributorId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ExpenseId");
 
@@ -123,7 +121,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.Expense", b =>
                 {
-                    b.Property<int>("ExpenseId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -149,7 +147,7 @@ namespace API.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("ExpenseId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
 
@@ -160,19 +158,19 @@ namespace API.Data.Migrations
                     b.ToTable("Expenses");
                 });
 
-            modelBuilder.Entity("API.Entities.UserCampaign", b =>
+            modelBuilder.Entity("AppUserCampaign", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("CampaignsId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CampaignId")
+                    b.Property<int>("UsersId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("UserId", "CampaignId");
+                    b.HasKey("CampaignsId", "UsersId");
 
-                    b.HasIndex("CampaignId");
+                    b.HasIndex("UsersId");
 
-                    b.ToTable("UserCampaigns");
+                    b.ToTable("AppUserCampaign");
                 });
 
             modelBuilder.Entity("API.Entities.Avatar", b =>
@@ -243,36 +241,28 @@ namespace API.Data.Migrations
                     b.Navigation("PaidBy");
                 });
 
-            modelBuilder.Entity("API.Entities.UserCampaign", b =>
+            modelBuilder.Entity("AppUserCampaign", b =>
                 {
-                    b.HasOne("API.Entities.AppUser", "User")
-                        .WithMany("UserCampaigns")
-                        .HasForeignKey("CampaignId")
+                    b.HasOne("API.Entities.Campaign", null)
+                        .WithMany()
+                        .HasForeignKey("CampaignsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Entities.Campaign", "Campaign")
-                        .WithMany("CampaignUsers")
-                        .HasForeignKey("UserId")
+                    b.HasOne("API.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Campaign");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
                     b.Navigation("Avatar");
-
-                    b.Navigation("UserCampaigns");
                 });
 
             modelBuilder.Entity("API.Entities.Campaign", b =>
                 {
-                    b.Navigation("CampaignUsers");
-
                     b.Navigation("Expenses");
                 });
 #pragma warning restore 612, 618
