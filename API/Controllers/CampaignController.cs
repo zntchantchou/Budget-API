@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using API.Controllers;
 using API.Data;
 using API.DTOs;
+using System.Linq;
 using API.Entities;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 public class CampaignController : BaseApiController
 {
@@ -27,7 +29,7 @@ public class CampaignController : BaseApiController
 
   [Authorize]
   [HttpPost]
-  public async Task<ActionResult<string>> CreateCampaign(CampaignDTO campaignDTO)
+  public async Task<ActionResult<CampaignDTO>> CreateCampaign(CampaignDTO campaignDTO)
   {
     var tokenString = Request.Headers["Authorization"].ToString();
     var userData = _tokenService.ParseToken(tokenString);
@@ -35,32 +37,44 @@ public class CampaignController : BaseApiController
     var campaign = new Campaign
     {
       AdminId = user.AppUserId,
-      Title = campaignDTO.Title
+      Title = campaignDTO.Title,
+      Description = campaignDTO.Description,
     };
+
     if (campaignDTO.UserEmails.Count > 0)
     {
+    // right now if users are not retrieved by email, campaign is still created without users
       // make sure  a user was found for every user provided 
       var campaignUsers = await _userRepository.GetFullUsersByEmailAsync(campaignDTO.UserEmails);
-      if (campaignUsers != null && campaignUsers.Count == campaignDTO.UserEmails.Count)
+      if (campaignUsers == null || campaignUsers.Count != campaignDTO.UserEmails.Count)
       {
-        // campaign.Users = campaignUsers;
+        return BadRequest("Some of the users that you tried to add to this campaign do not exist");
       }
     }
-    // right now if users are not retrieved by email, campaign is still created without users
     _context.Campaigns.Add(campaign);
     await _context.SaveChangesAsync();
+
+    
     return Ok(campaignDTO);
   }
 
-  // [Authorize]
-  // [HttpGet]
-  // public async Task<ActionResult<ICollection<Campaign>>> GetUserCampaigns()
-  // {
-  //   var tokenString = Request.Headers["Authorization"].ToString();
-  //   var userData = _tokenService.ParseToken(tokenString);
-  //   Console.WriteLine("GetUserCampaigns");
-  //   var email = userData["email"];
-  //   var user = await _userRepository.GetFullUserByEmailAsync(email);
-  //   return Ok(user.Campaigns);
-  // }
+  [Authorize]
+  [HttpGet]
+  public async Task<List<UserCampaignDTO>> GetUserCampaigns()
+  {
+    var tokenString = Request.Headers["Authorization"].ToString();
+    var userData = _tokenService.ParseToken(tokenString);
+    var email = userData["email"];
+    var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+    var userCampaignRefs = await _context.UserCampaigns.Where(uc => uc.UserId == user.AppUserId).ToListAsync();
+    var userCampaigns = new List<Campaign>();
+    foreach(var campaignRef in userCampaignRefs) {
+      var found = await _context.Campaigns.FindAsync(campaignRef.CampaignId);
+      if(found != null) { 
+        userCampaigns.Add(found);
+      }
+    }
+    var mapped = _mapper.Map<List<UserCampaignDTO>>(userCampaigns);
+    return mapped;
+  }
 }

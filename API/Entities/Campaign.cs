@@ -16,7 +16,7 @@ namespace API.Entities
     public string Description { get; set; }
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
-    // public ICollection<AppUser> Users { get; set; }
+    public ICollection<UserCampaign> CampaignUsers { get; set; }
     public ICollection<Expense> Expenses { get; set; }
   }
 }

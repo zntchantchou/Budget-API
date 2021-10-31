@@ -21,6 +21,6 @@ namespace API.Entities
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public Avatar Avatar { get; set; }
-    // public ICollection<Campaign> Campaigns { get; set; }
+    public ICollection<UserCampaign> UserCampaigns { get; set; }
   }
 }

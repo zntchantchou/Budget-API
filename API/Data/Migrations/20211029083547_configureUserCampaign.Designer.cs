@@ -3,14 +3,16 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211029083547_configureUserCampaign")]
+    partial class configureUserCampaign
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,7 +174,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("CampaignId");
 
-                    b.ToTable("UserCampaigns");
+                    b.ToTable("UserCampaign");
                 });
 
             modelBuilder.Entity("API.Entities.Avatar", b =>
@@ -252,7 +254,7 @@ namespace API.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("API.Entities.Campaign", "Campaign")
-                        .WithMany("CampaignUsers")
+                        .WithMany("UserCampaigns")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -271,9 +273,9 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.Campaign", b =>
                 {
-                    b.Navigation("CampaignUsers");
-
                     b.Navigation("Expenses");
+
+                    b.Navigation("UserCampaigns");
                 });
 #pragma warning restore 612, 618
         }

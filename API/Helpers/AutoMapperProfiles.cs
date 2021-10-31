@@ -17,6 +17,8 @@ namespace API.Helpers
       CreateMap<Avatar, AvatarDTO>();
       CreateMap<AppUser, FullUserDTO>();
       CreateMap<Campaign, CampaignDTO>();
+      CreateMap<Campaign, UserCampaignDTO>();
+ 
     }
   }
 }
