@@ -11,7 +11,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 public class CampaignController : BaseApiController
 {
   private readonly ITokenService _tokenService;
@@ -46,10 +45,6 @@ public class CampaignController : BaseApiController
       }
       campaignUsers.AddRange(additionalUsers);
     }
-    foreach(var addedUser in campaignUsers) {
-      Console.WriteLine("User added: ");
-      Console.WriteLine(addedUser.Email);
-    }
     var campaign = new Campaign
       {
         Title = campaignDTO.Title,
@@ -77,6 +72,7 @@ public class CampaignController : BaseApiController
     return mapped;
   }
 
+
   [Authorize]
   [HttpGet("admin")]
   public async Task<List<UserCampaignDTO>> GetAdminCampaigns()
@@ -90,4 +86,33 @@ public class CampaignController : BaseApiController
     return mapped;
   }
 
+  // [Authorize]
+  // [HttpGet("{id}")]
+  // public async Task<CampaignDetailsDTO> GetCampaignById(int id) {
+  //   var cpgn = await _context.Campaigns
+  //   .Include(c => c.Users)
+  //   .FirstOrDefaultAsync(elt => elt.CampaignId == id);
+  //   return new CampaignDetailsDTO {
+  //     Title = cpgn.Title, 
+  //     Description = cpgn.Description, 
+  //     Users = _mapper.Map<ICollection<UserDTO>>(cpgn.Users), 
+  //   };
+  // }
+
+  [Authorize]
+  [HttpGet("{title}")]
+  public async Task<CampaignDetailsDTO> GetCampaignByTitle(string title) {
+    var tokenString = Request.Headers["Authorization"].ToString();
+    var userData = _tokenService.ParseToken(tokenString);
+    var email = userData["email"];
+    var user  = await _context.Users
+    .Include(u => u.Campaigns)
+    .SingleOrDefaultAsync(u => u.Email == email);
+    var campaign = user.Campaigns.FirstOrDefault(c => c.Title == title);
+    return new CampaignDetailsDTO {
+      Title = campaign.Title, 
+      Description = campaign.Description, 
+      Users = _mapper.Map<ICollection<UserDTO>>(campaign.Users), 
+    };
+  }
 }
