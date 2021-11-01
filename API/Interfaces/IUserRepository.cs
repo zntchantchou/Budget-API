@@ -12,11 +12,12 @@ namespace API.Interfaces
 
     Task<bool> SaveAllAsync();
     Task<IEnumerable<UserDTO>> GetUsersAsync();
-
     Task<UserDTO> GetUserByIdAsync(int id);
-    Task<UserDTO> GetUserByEmailAsync(String email);
-    Task<AppUser> GetFullUserByEmailAsync(String email);
-    Task<ICollection<AppUser>> GetFullUsersByEmailAsync(List<string> email);
+    Task<AppUser> GetUserByEmailAsync(String email);
+
+    Task<ICollection<AppUser>> GetUsersByEmailAsync(List<string> email);
+    Task<FullUserDTO> GetFullUserByEmailAsync(String email);
+    Task<ICollection<FullUserDTO>> GetFullUsersByEmailAsync(List<string> email);
 
   }
 }

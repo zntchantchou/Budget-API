@@ -27,36 +27,27 @@ namespace API.Data
       }
       await context.SaveChangesAsync();
     }
-    public static async Task SeedUserCampaigns(DataContext context)
+    public static async Task<int> SeedUserCampaigns(DataContext context)
     {
       Console.WriteLine("Seeding Campaigns...");
-      if (await context.Campaigns.AnyAsync()) return;
-
+      // Create Campaigns With every user users
       var users = await context.Users.ToListAsync();
-      foreach (var user in users)
+
+      var campaigns = new List<Campaign>();
+      for (var i = 0; i < 5; i++)
       {
-        for (var i = 0; i < 3; i++)
+        var newCpgn = new Campaign
         {
-          var title = $"{user.Username}_campaign_{i}";
-          var campaign = new Campaign
-          {
-            Title = title,
-            Description = $"Description for {user.Email} 's number {i} campaign ",
-            AdminId = user.AppUserId,
-          };
-          Console.WriteLine($"Saved campaigns for user {user.Email}");
-          context.Campaigns.Add(campaign);
-          await context.SaveChangesAsync();
-          var newCampaign = await context.Campaigns.FirstOrDefaultAsync(c => c.Title == title);
-          var userCampaign = new UserCampaign
-          {
-            UserId = user.AppUserId,
-            CampaignId = newCampaign.CampaignId
-          };
-          context.UserCampaigns.Add(userCampaign);
-          await context.SaveChangesAsync();
-        }
+          Title = $"Campaign_{i}",
+          Description = $"A long description for campaign n°{i}",
+          Users = users
+        };
+        campaigns.Add(newCpgn);
       }
+      context.Campaigns.AddRange(campaigns);
+      var saveResult = await context.SaveChangesAsync();
+      Console.WriteLine("Done Seeding Campaings");
+      return saveResult; 
     }
   }
 }

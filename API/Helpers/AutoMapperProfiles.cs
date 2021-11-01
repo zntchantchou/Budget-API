@@ -12,13 +12,14 @@ namespace API.Helpers
   {
     public AutoMapperProfiles()
     {
-      CreateMap<AppUser, UserDTO>()
-      .ForMember(u => u.AvatarUrl, src => src.MapFrom(u => u.Avatar.Url));
-      CreateMap<Avatar, AvatarDTO>();
+      CreateMap<AppUser, UserDTO>();
+      // .ForMember(u => u.AvatarUrl, src => src.MapFrom(u => u.Avatar.Url));
       CreateMap<AppUser, FullUserDTO>();
-      CreateMap<Campaign, CampaignDTO>();
+      CreateMap<FullUserDTO, AppUser>();
       CreateMap<Campaign, UserCampaignDTO>();
- 
+      // CreateMap<AppUser, AppUser>();
+      // CreateMap<Avatar, AvatarDTO>();
+      // CreateMap<Campaign, CampaignDTO>();
     }
   }
 }

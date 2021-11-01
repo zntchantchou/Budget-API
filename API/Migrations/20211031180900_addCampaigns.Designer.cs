@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace API.Data.Migrations
+namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20211029080702_defineAvatarUserRelation")]
-    partial class defineAvatarUserRelation
+    [Migration("20211031180900_addCampaigns")]
+    partial class addCampaigns
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,6 +32,7 @@ namespace API.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<byte[]>("PasswordHash")
@@ -42,6 +43,7 @@ namespace API.Data.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.HasKey("AppUserId");
@@ -81,9 +83,6 @@ namespace API.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AdminId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
@@ -97,69 +96,22 @@ namespace API.Data.Migrations
 
                     b.HasKey("CampaignId");
 
-                    b.HasIndex("AdminId");
-
                     b.ToTable("Campaigns");
                 });
 
-            modelBuilder.Entity("API.Entities.Contributor", b =>
+            modelBuilder.Entity("AppUserCampaign", b =>
                 {
-                    b.Property<int>("ContributorId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("CampaignsCampaignId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ExpenseId")
+                    b.Property<int>("UsersAppUserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
+                    b.HasKey("CampaignsCampaignId", "UsersAppUserId");
 
-                    b.HasKey("ContributorId");
+                    b.HasIndex("UsersAppUserId");
 
-                    b.HasIndex("ExpenseId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Contributors");
-                });
-
-            modelBuilder.Entity("API.Entities.Expense", b =>
-                {
-                    b.Property<int>("ExpenseId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<float>("Amount")
-                        .HasColumnType("REAL");
-
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CampaignId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("ExpenseDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("PaidById")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ExpenseId");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("CampaignId");
-
-                    b.HasIndex("PaidById");
-
-                    b.ToTable("Expenses");
+                    b.ToTable("AppUserCampaign");
                 });
 
             modelBuilder.Entity("API.Entities.Avatar", b =>
@@ -173,71 +125,24 @@ namespace API.Data.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("API.Entities.Campaign", b =>
+            modelBuilder.Entity("AppUserCampaign", b =>
                 {
-                    b.HasOne("API.Entities.AppUser", "Admin")
+                    b.HasOne("API.Entities.Campaign", null)
                         .WithMany()
-                        .HasForeignKey("AdminId")
+                        .HasForeignKey("CampaignsCampaignId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Admin");
-                });
-
-            modelBuilder.Entity("API.Entities.Contributor", b =>
-                {
-                    b.HasOne("API.Entities.Expense", "Expense")
+                    b.HasOne("API.Entities.AppUser", null)
                         .WithMany()
-                        .HasForeignKey("ExpenseId")
+                        .HasForeignKey("UsersAppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("API.Entities.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Expense");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("API.Entities.Expense", b =>
-                {
-                    b.HasOne("API.Entities.AppUser", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Entities.Campaign", "Campaign")
-                        .WithMany("Expenses")
-                        .HasForeignKey("CampaignId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Entities.AppUser", "PaidBy")
-                        .WithMany()
-                        .HasForeignKey("PaidById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Campaign");
-
-                    b.Navigation("PaidBy");
                 });
 
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
                     b.Navigation("Avatar");
-                });
-
-            modelBuilder.Entity("API.Entities.Campaign", b =>
-                {
-                    b.Navigation("Expenses");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,11 +8,11 @@ namespace API.Data
     public DataContext(DbContextOptions options) : base(options)
     {
     }
-    public DbSet<AppUser> Users { get; set; }
-    public DbSet<Expense> Expenses { get; set; }
     public DbSet<Campaign> Campaigns { get; set; }
-    public DbSet<Contributor> Contributors {get; set;}
-    public DbSet<UserCampaign> UserCampaigns {get; set;}
+    public DbSet<AppUser> Users { get; set; }
+    // public DbSet<Expense> Expenses { get; set; }
+    // public DbSet<Contributor> Contributors {get; set;}
+    // public DbSet<UserCampaign> UserCampaigns {get; set;}
     protected override void OnModelCreating(ModelBuilder builder)
     {
       builder.Entity<AppUser>()
@@ -23,19 +23,18 @@ namespace API.Data
       .WithOne(a => a.AppUser)
       .HasForeignKey<Avatar>(u => u.AppUserId);
 
-      builder.Entity<UserCampaign>()
-      .HasKey(uc => new {uc.UserId, uc.CampaignId});
+      // builder.Entity<UserCampaign>()
+      // .HasKey(uc => new {uc.UserId, uc.CampaignId});
+      // builder.Entity<UserCampaign>()
+      // .HasOne(uc => uc.User)
+      // .WithMany(u => u.UserCampaigns)
+      // .HasForeignKey(uc => uc.CampaignId);
+      // // .OnDelete(DeleteBehavior.Cascade);
 
-      builder.Entity<UserCampaign>()
-      .HasOne(uc => uc.User)
-      .WithMany(u => u.UserCampaigns)
-      .HasForeignKey(uc => uc.CampaignId);
-      // .OnDelete(DeleteBehavior.Cascade);
-
-      builder.Entity<UserCampaign>()
-      .HasOne(uc => uc.Campaign)
-      .WithMany(c => c.CampaignUsers)
-      .HasForeignKey(uc => uc.UserId);
+      // builder.Entity<UserCampaign>()
+      // .HasOne(uc => uc.Campaign)
+      // .WithMany(c => c.CampaignUsers)
+      // .HasForeignKey(uc => uc.UserId);
       // .OnDelete(DeleteBehavior.Cascade);
 
 

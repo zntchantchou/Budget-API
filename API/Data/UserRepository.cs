@@ -29,26 +29,38 @@ namespace API.Data
       .SingleOrDefaultAsync();
     }
 
-    public async Task<UserDTO> GetUserByEmailAsync(String email)
+    public async Task<AppUser> GetUserByEmailAsync(String email)
     {
       return await _context.Users
-      .Where(u => u.Email == email)
-      .ProjectTo<UserDTO>(_mapper.ConfigurationProvider)
-      .SingleOrDefaultAsync();
+      .SingleOrDefaultAsync(u => u.Email == email);
     }
 
-    public async Task<AppUser> GetFullUserByEmailAsync(String email)
+    public async Task<FullUserDTO> GetFullUserByEmailAsync(String email)
     {
       return await _context.Users
       .Where(u => u.Email == email)
+      .ProjectTo<FullUserDTO>(_mapper.ConfigurationProvider)
       .SingleOrDefaultAsync();
     }
-    public async Task<ICollection<AppUser>> GetFullUsersByEmailAsync(List<string> emails)
+    public async Task<ICollection<FullUserDTO>> GetFullUsersByEmailAsync(List<string> emails)
     {
+      // get users as appUsers 
       return await _context.Users
       .Where(u => emails.Contains(u.Email))
+      .ProjectTo<FullUserDTO>(_mapper.ConfigurationProvider)
       .ToListAsync();
     }
+
+
+    public async Task<ICollection<AppUser>> GetUsersByEmailAsync(List<string> emails)
+    {
+      // get users as appUsers
+      var users = await _context.Users
+      .Where(u => emails.Contains(u.Email))
+      .ToListAsync();
+      return users;
+    }
+
 
     public async Task<IEnumerable<UserDTO>> GetUsersAsync()
     {
@@ -62,6 +74,7 @@ namespace API.Data
       // EF will add a modified flag to this entity
       _context.Entry(user).State = EntityState.Modified;
     }
+
     public async Task<bool> SaveAllAsync()
     {
       return await _context.SaveChangesAsync() > 0;
