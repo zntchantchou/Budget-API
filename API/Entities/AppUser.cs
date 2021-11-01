@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Entities
 {
   public class AppUser
   {
-   
     public int AppUserId { get; set; }
     [Required]
     [MaxLength(100)]
     public string Username { get; set; }
-    
+
     [Required]
     [MaxLength(50)]
     public string Email { get; set; }
@@ -25,6 +23,8 @@ namespace API.Entities
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public Avatar Avatar { get; set; }
-    public ICollection<Campaign> Campaigns { get; set; }
+
+    public virtual ICollection<Campaign> Campaigns {get; set;}
+    // public ICollection<UserCampaign> UserCampaigns { get; set; }
   }
 }

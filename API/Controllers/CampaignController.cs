@@ -54,7 +54,8 @@ public class CampaignController : BaseApiController
       {
         Title = campaignDTO.Title,
         Description = campaignDTO.Description,
-        Users = campaignUsers
+        Users = campaignUsers, 
+        Admin = user,
       };
     _context.Campaigns.Add(campaign);
     await _context.SaveChangesAsync();
@@ -71,7 +72,7 @@ public class CampaignController : BaseApiController
     var user = await _context.Users
     .Include(u => u.Campaigns)
     .FirstOrDefaultAsync(u => u.Email == email);   
-    var userCampaigns = user.Campaigns;
+    var userCampaigns = user.Campaigns.OrderByDescending(c => c.CreatedAt);
     var mapped = _mapper.Map<List<UserCampaignDTO>>(userCampaigns);
     return mapped;
   }
