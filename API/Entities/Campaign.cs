@@ -4,12 +4,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.Entities
 {
-  public class Campaign
+  public class Campaign 
   {
     public int CampaignId { get; set; }
-    // public AppUser Admin { get; set; }
-    // [Required]
-    // public int AdminId { get; set; }
+
+    [Required]
+    public int AdminId { get; set; }
+
+    public virtual AppUser Admin { get; set; }
     [Required]
     public string Title { get; set; }
     [StringLength(140, MinimumLength = 2)]

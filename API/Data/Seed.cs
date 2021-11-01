@@ -31,16 +31,27 @@ namespace API.Data
     {
       Console.WriteLine("Seeding Campaigns...");
       // Create Campaigns With every user users
+      if(await context.Campaigns.AnyAsync())
+     {
+       Console.WriteLine("[SeedUserCampaigns] Not seeding as there are already campaigns in the database");
+       return 0;
+     }
       var users = await context.Users.ToListAsync();
 
       var campaigns = new List<Campaign>();
-      for (var i = 0; i < 5; i++)
+      for (var i = 1; i < 6; i++)
       {
+        var adminUser = users.Find(u => u.AppUserId == i);
+        if(adminUser == null) {
+          Console.WriteLine($"[SeedUserCampaigns] Admin user with id {i} not found ");
+          return 0;
+        } 
         var newCpgn = new Campaign
         {
           Title = $"Campaign_{i}",
           Description = $"A long description for campaign n°{i}",
-          Users = users
+          Users = users, 
+          Admin = adminUser
         };
         campaigns.Add(newCpgn);
       }

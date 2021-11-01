@@ -23,6 +23,21 @@ namespace API.Data
       .WithOne(a => a.AppUser)
       .HasForeignKey<Avatar>(u => u.AppUserId);
 
+      builder.Entity<AppUser>()
+      .HasMany(u => u.Campaigns)
+      .WithMany(c => c.Users);
+
+      builder.Entity<Campaign>()
+      .HasOne(c => c.Admin)
+      .WithMany()
+      .HasForeignKey(c => c.AdminId)
+      .IsRequired();
+
+      // builder.Entity<Campaign>()
+      // .HasOne(c => c.Admin)
+      // .WithMany()
+      // .IsRequired();
+      // .IsRequired();
       // builder.Entity<UserCampaign>()
       // .HasKey(uc => new {uc.UserId, uc.CampaignId});
       // builder.Entity<UserCampaign>()

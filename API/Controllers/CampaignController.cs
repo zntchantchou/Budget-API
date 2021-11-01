@@ -6,6 +6,7 @@ using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
+using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -74,4 +75,18 @@ public class CampaignController : BaseApiController
     var mapped = _mapper.Map<List<UserCampaignDTO>>(userCampaigns);
     return mapped;
   }
+
+  [Authorize]
+  [HttpGet("admin")]
+  public async Task<List<UserCampaignDTO>> GetAdminCampaigns()
+  {
+    var tokenString = Request.Headers["Authorization"].ToString();
+    var userData = _tokenService.ParseToken(tokenString);
+    var email = userData["email"];
+    var currentUser = await _userRepository.GetUserByEmailAsync(email);
+    var userCampaigns = await _context.Campaigns.Where(c => c.Admin.AppUserId == currentUser.AppUserId).ToListAsync();
+    var mapped = _mapper.Map<List<UserCampaignDTO>>(userCampaigns);
+    return mapped;
+  }
+
 }
