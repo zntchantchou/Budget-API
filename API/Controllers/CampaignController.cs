@@ -11,7 +11,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using AutoMapper.QueryableExtensions;
 public class CampaignController : BaseApiController
 {
   private readonly ITokenService _tokenService;
@@ -90,4 +90,16 @@ public class CampaignController : BaseApiController
     return mapped;
   }
 
+  [Authorize]
+  [HttpGet("{id}")]
+  public async Task<CampaignDetailsDTO> GetCampaign(int id) {
+    var cpgn = await _context.Campaigns
+    .Include(c => c.Users)
+    .FirstOrDefaultAsync(elt => elt.CampaignId == id);
+    return new CampaignDetailsDTO {
+      Title = cpgn.Title, 
+      Description = cpgn.Description, 
+      Users = _mapper.Map<ICollection<UserDTO>>(cpgn.Users), 
+    };
+  }
 }

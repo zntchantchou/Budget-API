@@ -17,6 +17,9 @@ namespace API.Helpers
       CreateMap<AppUser, FullUserDTO>();
       CreateMap<FullUserDTO, AppUser>();
       CreateMap<Campaign, UserCampaignDTO>();
+      // CreateMap<Campaign, CampaignDetailsDTO>()
+      // .ForMember(dest => dest.Users, opt => opt.MapFrom(src => src.Users.t))
+
       // CreateMap<AppUser, AppUser>();
       // CreateMap<Avatar, AvatarDTO>();
       // CreateMap<Campaign, CampaignDTO>();
